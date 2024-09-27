@@ -1,22 +1,34 @@
 class Solution {
-    int matchesOrNot(List<String> items, String ruleValue, int index) {
-        if(items.get(index).equals(ruleValue)) {
-            return 1;
-        }
-        return 0;
-    }
     public int countMatches(List<List<String>> items, String ruleKey, String ruleValue) {
-        int count = 0;
-        int size = items.size();
-        int index = 0;
-        if(ruleKey.equals("type")) index = 0;
-        else if(ruleKey.equals("color")) index = 1;
-        else index = 2;
-
-        for(int i = 0; i < size; i++) {
-            count += matchesOrNot(items.get(i), ruleValue, index);
+    int key=0;
+    switch(ruleKey){
+        case "type":{
+            key=0;
+            break;
         }
-
-        return count;
+        case "color":{
+            key=1;
+            break;
+        }
+        case "name":{
+            key=2;
+            break;
+        }
+        default :{
+            key=-1;
+            break;
+        }
     }
+    return matchCall(items,0,key,0,ruleValue);
+    }
+    
+    public int matchCall(List<List<String>>items,int i,int key,int count,String value){
+        if(i==items.size()){
+            return count;
+        }
+        if( items.get(i).get(key).equals(value)){
+            count++;
+        }
+        return matchCall(items,i+1,key,count,value);
+        }
 }
