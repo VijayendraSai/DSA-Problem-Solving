@@ -1,21 +1,22 @@
 class Solution {
     public int oddCells(int m, int n, int[][] indices) {
-        int[] rowInc = new int[m];
-        int[] colInc = new int[n];
-
-        for(int[] ind : indices) {
-            rowInc[ind[0]]++;
-            colInc[ind[1]]++;
+        boolean[] row = new boolean[m];
+        boolean[] col = new boolean[n];
+        
+        for(int i=0;i<indices.length;i++){
+            row[indices[i][0]] ^= true;
+            col[indices[i][1]] ^= true;
         }
-
-        int count = 0;
-        for(int i=0; i<m; i++) {
-            for(int j=0; j<n; j++) {
-                if((rowInc[i] + colInc[j]) % 2 == 1)
-                    ++count;
-            }
+        //get odd num rows and cols
+        int r=0,c=0;
+        for(int i=0;i<m;i++){
+            if(row[i]) r++;
         }
-
-        return count;
+        for(int i=0;i<n;i++){
+            if(col[i]) c++;
+        }
+        // return m * sum(odd_rows) + n * sum(odd_cols) - 2 * sum(odd_rows) * sum(odd_cols);
+        int oddValues = r*n + c*m -2*r*c;
+        return oddValues;
     }
 }
