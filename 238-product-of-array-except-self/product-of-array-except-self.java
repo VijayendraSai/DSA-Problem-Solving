@@ -20,10 +20,34 @@ class Solution {
         }
 
         int[] result = new int[nums.length];
+        HashMap<Integer, Integer> map = new HashMap<>();
         for (int i = 0; i < nums.length; i++) {
-            result[i] = product / nums[i];
+            if(map.containsKey(nums[i])) {
+                result[i] = map.get(nums[i]);
+            }
+            else {
+                result[i] = divideByNumber(product, nums[i]);
+                map.put(nums[i], result[i]);
+            } 
         }
         
+        return result;
+    }
+
+    public static int divideByNumber(int dividend, int divisor) {
+        int result = 0;
+        int sign = 1;
+        if((dividend < 0 && divisor > 0) || (dividend > 0 && divisor < 0)) {
+            sign = -1;
+        }
+        dividend = Math.abs(dividend);
+        divisor = Math.abs(divisor);
+        if(divisor == 1) return dividend*sign;
+        while (dividend > 0) {
+            dividend -= Math.abs(divisor);
+            result++;
+        }
+        result *= sign; 
         return result;
     }
 }
