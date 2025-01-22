@@ -1,53 +1,22 @@
 class Solution {
     public int[] productExceptSelf(int[] nums) {
-        int count_zero = 0, product = 1;
-        for(int num: nums) {
-            if(num == 0) {
-                count_zero++;
-            }
-            else {
-                product *= num;
-            }
+        int n = nums.length;
+        int pre[] = new int[n];
+        int suff[] = new int[n];
+        pre[0] = 1;
+        suff[n - 1] = 1;
+        
+        for(int i = 1; i < n; i++) {
+            pre[i] = pre[i - 1] * nums[i - 1];
         }
-        if(count_zero > 1) return new int[nums.length];
-
-        if (count_zero == 1) {
-            int[] result = new int[nums.length];
-            for (int i = 0; i < nums.length; i++) {
-                result[i] = (nums[i] == 0) ? product : 0;
-            }
-            return result;
-        }
-
-        int[] result = new int[nums.length];
-        HashMap<Integer, Integer> map = new HashMap<>();
-        for (int i = 0; i < nums.length; i++) {
-            if(map.containsKey(nums[i])) {
-                result[i] = map.get(nums[i]);
-            }
-            else {
-                result[i] = divideByNumber(product, nums[i]);
-                map.put(nums[i], result[i]);
-            } 
+        for(int i = n - 2; i >= 0; i--) {
+            suff[i] = suff[i + 1] * nums[i + 1];
         }
         
-        return result;
-    }
-
-    public static int divideByNumber(int dividend, int divisor) {
-        int result = 0;
-        int sign = 1;
-        if((dividend < 0 && divisor > 0) || (dividend > 0 && divisor < 0)) {
-            sign = -1;
+        int ans[] = new int[n];
+        for(int i = 0; i < n; i++) {
+            ans[i] = pre[i] * suff[i];
         }
-        dividend = Math.abs(dividend);
-        divisor = Math.abs(divisor);
-        if(divisor == 1) return dividend*sign;
-        while (dividend > 0) {
-            dividend -= Math.abs(divisor);
-            result++;
-        }
-        result *= sign; 
-        return result;
+        return ans;
     }
 }
